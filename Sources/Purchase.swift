@@ -2,9 +2,9 @@ import Foundation
 
 public enum Purchase: String, CaseIterable {
     case
-    one = "shortbread.1",
-    five = "shortbread.5",
-    ten = "shortbread.10"
+    one = "beet.1",
+    five = "beet.5",
+    ten = "beet.10"
     
     public var save: Int {
         switch self {
