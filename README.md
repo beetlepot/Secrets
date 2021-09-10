@@ -1,3 +1,3 @@
 # Secrets
 
-A description of this package.
+Secrets package
