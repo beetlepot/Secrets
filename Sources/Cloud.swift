@@ -3,9 +3,9 @@ import Archivable
 extension Cloud where A == Archive {
     public static var new: Self {
         let cloud = Self()
-        Task {
-            await cloud.load(container: .init(name: "iCloud.beetle"))
-        }
+//        Task {
+//            await cloud.load(container: .init(name: "iCloud.beetle"))
+//        }
         return cloud
     }
     
