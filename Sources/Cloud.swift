@@ -102,15 +102,6 @@ extension Cloud where A == Archive {
         await stream()
     }
     
-    public func with(id: Int) -> Secret {
-        arch
-            .secrets
-            .first {
-                $0.id == id
-            }
-        ?? .new
-    }
-    
     private var id: Int {
         for index in (0 ..< 1_000) {
             if !arch

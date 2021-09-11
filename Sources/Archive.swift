@@ -4,6 +4,7 @@ import Archivable
 public struct Archive: Arch {
     public static let version = UInt8()
     public static let new = Self()
+    
     public var timestamp: UInt32
     public internal(set) var capacity: Int
     var secrets: [Secret]
@@ -32,10 +33,12 @@ public struct Archive: Arch {
         capacity = 1
     }
     
-    public subscript(_ index: Int) -> Secret {
-        secrets.count > index
-        ? secrets[index]
-        : .new
+    public subscript(_ id: Int) -> Secret {
+        secrets
+            .first {
+                $0.id == id
+            }
+        ?? .new
     }
     
     public init(version: UInt8, timestamp: UInt32, data: Data) async {
