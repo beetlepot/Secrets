@@ -1,8 +1,10 @@
 import Foundation
 import Archivable
 
-public struct Secret: Storable {
-    public static let new = Secret(name: "", payload: "", date: .now, favourite: false, tags: [])
+public struct Secret: Storable, Identifiable {
+    static let new = Secret(id: 0, name: "", payload: "", date: .now, favourite: false, tags: [])
+    
+    public let id: Int
     public let name: String
     public let payload: String
     public let date: Date
@@ -11,6 +13,7 @@ public struct Secret: Storable {
     
     public var data: Data {
         .init()
+        .adding(UInt16(id))
         .adding(name)
         .adding(payload)
         .adding(date)
@@ -20,6 +23,7 @@ public struct Secret: Storable {
     }
     
     public init(data: inout Data) {
+        id = .init(data.uInt16())
         name = data.string()
         payload = data.string()
         date = data.date()
@@ -30,7 +34,8 @@ public struct Secret: Storable {
                         })
     }
     
-    private init(name: String, payload: String, date: Date, favourite: Bool, tags: Set<Tag>) {
+    private init(id: Int, name: String, payload: String, date: Date, favourite: Bool, tags: Set<Tag>) {
+        self.id = id
         self.name = name
         self.payload = payload
         self.date = date
@@ -38,23 +43,27 @@ public struct Secret: Storable {
         self.tags = tags
     }
     
+    func with(id: Int) -> Self {
+        .init(id: id, name: name, payload: payload, date: .init(), favourite: favourite, tags: tags)
+    }
+    
     func with(name: String) -> Self {
-        .init(name: name, payload: payload, date: .init(), favourite: favourite, tags: tags)
+        .init(id: id, name: name, payload: payload, date: .init(), favourite: favourite, tags: tags)
     }
     
     func with(payload: String) -> Self {
-        .init(name: name, payload: payload, date: .init(), favourite: favourite, tags: tags)
+        .init(id: id, name: name, payload: payload, date: .init(), favourite: favourite, tags: tags)
     }
     
     func with(favourite: Bool) -> Self {
-        .init(name: name, payload: payload, date: .init(), favourite: favourite, tags: tags)
+        .init(id: id, name: name, payload: payload, date: .init(), favourite: favourite, tags: tags)
     }
     
     func with(tags: Set<Tag>) -> Self {
-        .init(name: name, payload: payload, date: .init(), favourite: favourite, tags: tags)
+        .init(id: id, name: name, payload: payload, date: .init(), favourite: favourite, tags: tags)
     }
     
     func with(date: Date) -> Self {
-        .init(name: name, payload: payload, date: date, favourite: favourite, tags: tags)
+        .init(id: id, name: name, payload: payload, date: date, favourite: favourite, tags: tags)
     }
 }

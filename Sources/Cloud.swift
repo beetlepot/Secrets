@@ -1,25 +1,32 @@
 import Archivable
+import Darwin
 
 extension Cloud where A == Archive {    
     public func secret() async -> Int {
+        let id = self.id
         arch
             .secrets
             .append(
                 .new
+                    .with(id: id)
                     .with(name: "Untitled"))
         await stream()
-        return arch.secrets.count - 1
+        return id
     }
     
-    public func delete(index: Int) async {
+    public func delete(id: Int) async {
+        guard let index = index(id: id) else { return }
         arch
             .secrets
             .remove(at: index)
         await stream()
     }
     
-    public func update(index: Int, name: String) async {
-        guard name != arch.secrets[index].name else { return }
+    public func update(id: Int, name: String) async {
+        guard
+            let index = index(id: id),
+            name != arch.secrets[index].name
+        else { return }
         arch
             .secrets
             .mutate(index: index) {
@@ -28,8 +35,11 @@ extension Cloud where A == Archive {
         await stream()
     }
     
-    public func update(index: Int, payload: String) async {
-        guard payload != arch.secrets[index].payload else { return }
+    public func update(id: Int, payload: String) async {
+        guard
+            let index = index(id: id),
+            payload != arch.secrets[index].payload
+        else { return }
         arch
             .secrets
             .mutate(index: index) {
@@ -38,8 +48,11 @@ extension Cloud where A == Archive {
         await stream()
     }
     
-    public func update(index: Int, favourite: Bool) async {
-        guard favourite != arch.secrets[index].favourite else { return }
+    public func update(id: Int, favourite: Bool) async {
+        guard
+            let index = index(id: id),
+            favourite != arch.secrets[index].favourite
+        else { return }
         arch
             .secrets
             .mutate(index: index) {
@@ -48,8 +61,11 @@ extension Cloud where A == Archive {
         await stream()
     }
     
-    public func add(index: Int, tag: Tag) async {
-        guard !arch.secrets[index].tags.contains(tag) else { return }
+    public func add(id: Int, tag: Tag) async {
+        guard
+            let index = index(id: id),
+            !arch.secrets[index].tags.contains(tag)
+        else { return }
         arch
             .secrets
             .mutate(index: index) {
@@ -60,8 +76,11 @@ extension Cloud where A == Archive {
         await stream()
     }
     
-    public func remove(index: Int, tag: Tag) async {
-        guard arch.secrets[index].tags.contains(tag) else { return }
+    public func remove(id: Int, tag: Tag) async {
+        guard
+            let index = index(id: id),
+            arch.secrets[index].tags.contains(tag)
+        else { return }
         arch
             .secrets
             .mutate(index: index) {
@@ -81,5 +100,33 @@ extension Cloud where A == Archive {
         arch.capacity -= purchase.value
         arch.capacity = max(arch.capacity, 1)
         await stream()
+    }
+    
+    public func with(id: Int) -> Secret {
+        arch
+            .secrets
+            .first {
+                $0.id == id
+            }
+        ?? .new
+    }
+    
+    private var id: Int {
+        for index in (0 ..< 1_000) {
+            if !arch
+                .secrets
+                .contains(where: { $0.id == index }) {
+                return index
+            }
+        }
+        return Int(UInt16.max)
+    }
+    
+    func index(id: Int) -> Int? {
+        arch
+            .secrets
+            .firstIndex {
+                $0.id == id
+            }
     }
 }

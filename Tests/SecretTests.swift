@@ -19,6 +19,7 @@ final class SecretTests: XCTestCase {
     func testData() {
         let date = Date(timeIntervalSinceNow: -10000)
         
+        secret = secret.with(id: 99)
         secret = secret.with(name: "secret name")
         secret = secret.with(payload: "some payload")
         secret = secret.with(date: date)
@@ -27,6 +28,7 @@ final class SecretTests: XCTestCase {
         
         secret = secret.data.prototype()
         
+        XCTAssertEqual(99, secret.id)
         XCTAssertEqual("secret name", secret.name)
         XCTAssertEqual("some payload", secret.payload)
         XCTAssertTrue(secret.favourite)
