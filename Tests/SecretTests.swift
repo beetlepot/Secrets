@@ -67,17 +67,20 @@ final class SecretTests: XCTestCase {
     
     func testFilter() {
         let array = [Secret.new
+                        .with(id: 88)
                         .with(name: "hello world")
                         .with(favourite: true),
                      .new
+                        .with(id: 55)
                         .with(name: "hello world 2"),
                      .new
+                        .with(id: 190)
                         .with(name: "lorem ipsum")
                         .with(favourite: true)]
-        XCTAssertEqual([0, 1, 2], array.filter(favourites: false, search: ""))
+        XCTAssertEqual([88, 55, 190], array.filter(favourites: false, search: ""))
         XCTAssertEqual([], array.filter(favourites: false, search: "alpha"))
         XCTAssertEqual([], array.filter(favourites: true, search: "2"))
-        XCTAssertEqual([0, 2], array.filter(favourites: true, search: "e"))
-        XCTAssertEqual([0, 1], array.filter(favourites: false, search: "hello"))
+        XCTAssertEqual([88, 190], array.filter(favourites: true, search: "e"))
+        XCTAssertEqual([88, 55], array.filter(favourites: false, search: "hello"))
     }
 }
