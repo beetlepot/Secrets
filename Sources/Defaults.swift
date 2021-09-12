@@ -4,7 +4,6 @@ public enum Defaults: String {
     case
     _rated,
     _created,
-    _onboarded,
     _authenticate,
     _tools,
     _spell,
@@ -18,11 +17,6 @@ public enum Defaults: String {
     public static var created: Date? {
         get { self[._created] as? Date }
         set { self[._created] = newValue }
-    }
-    
-    public static var onboarded: Bool {
-        get { self[._onboarded] as? Bool ?? false }
-        set { self[._onboarded] = newValue }
     }
     
     public static var authenticate: Bool {
