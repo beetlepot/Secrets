@@ -1,17 +1,16 @@
 import Archivable
-import Darwin
 
 extension Cloud where A == Archive {    
-    public func secret() async -> Int {
-        let id = self.id
+    public func secret() async -> Secret {
+        let secret = Secret
+            .new
+            .with(id: id)
+            .with(name: "Untitled")
         arch
             .secrets
-            .append(
-                .new
-                    .with(id: id)
-                    .with(name: "Untitled"))
+            .append(secret)
         await stream()
-        return id
+        return secret
     }
     
     public func delete(id: Int) async {

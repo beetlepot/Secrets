@@ -38,8 +38,8 @@ final class CloudTests: XCTestCase {
         let first = await cloud.secret()
         let second = await cloud.secret()
         
-        XCTAssertEqual(1, first)
-        XCTAssertEqual(3, second)
+        XCTAssertEqual(1, first.id)
+        XCTAssertEqual(3, second.id)
         
         await waitForExpectations(timeout: 1)
     }
@@ -52,14 +52,14 @@ final class CloudTests: XCTestCase {
         _ = await cloud.secret()
         
         let beforeDelete1 = await cloud.secret()
-        XCTAssertEqual(7, beforeDelete1)
+        XCTAssertEqual(7, beforeDelete1.id)
         
         await cloud.delete(id: 2)
         
         let afterDelete1 = await cloud.secret()
         let afterDelete2 = await cloud.secret()
-        XCTAssertEqual(2, afterDelete1)
-        XCTAssertEqual(8, afterDelete2)
+        XCTAssertEqual(2, afterDelete1.id)
+        XCTAssertEqual(8, afterDelete2.id)
         
         let id1 = await cloud.arch.secrets[cloud.arch.secrets.count - 2].id
         let id2 = await cloud.arch.secrets[cloud.arch.secrets.count - 1].id
