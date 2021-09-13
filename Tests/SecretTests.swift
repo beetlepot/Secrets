@@ -76,11 +76,43 @@ final class SecretTests: XCTestCase {
                      .new
                         .with(id: 190)
                         .with(name: "lorem ipsum")
-                        .with(favourite: true)]
-        XCTAssertEqual([88, 55, 190], array.filter(favourites: false, search: ""))
-        XCTAssertEqual([], array.filter(favourites: false, search: "alpha"))
-        XCTAssertEqual([], array.filter(favourites: true, search: "2"))
-        XCTAssertEqual([88, 190], array.filter(favourites: true, search: "e"))
-        XCTAssertEqual([88, 55], array.filter(favourites: false, search: "hello"))
+                        .with(favourite: true),
+                     .new
+                        .with(id: 33)
+                        .with(name: "z")
+                        .with(favourite: false)
+                        .with(tags: [.top, .books])]
+        
+        var filter = Filter()
+        XCTAssertEqual([88, 55, 190, 33], array.filtering(with: filter))
+        
+        filter.search = "alpha"
+        XCTAssertEqual([], array.filtering(with: filter))
+        
+        filter.favourites = true
+        filter.search = "2"
+        XCTAssertEqual([], array.filtering(with: filter))
+        
+        filter.search = "E"
+        XCTAssertEqual([88, 190], array.filtering(with: filter))
+        
+        filter.favourites = false
+        filter.search = "hello"
+        XCTAssertEqual([88, 55], array.filtering(with: filter))
+        
+        filter.tags = [.animals]
+        XCTAssertEqual([], array.filtering(with: filter))
+        
+        filter.tags = [.top]
+        XCTAssertEqual([], array.filtering(with: filter))
+        
+        filter.favourites = true
+        XCTAssertEqual([], array.filtering(with: filter))
+        
+        filter.search = ""
+        XCTAssertEqual([], array.filtering(with: filter))
+        
+        filter.favourites = false
+        XCTAssertEqual([33], array.filtering(with: filter))
     }
 }

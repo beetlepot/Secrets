@@ -60,7 +60,7 @@ public struct Archive: Arch {
             }
     }
     
-    public func filter(favourites: Bool, search: String) -> [Int] {
-        secrets.filter(favourites: favourites, search: search)
+    public func filtering(with: Filter) -> [Int] {
+        secrets.filtering(with: with)
     }
 }
