@@ -1,16 +1,16 @@
 import Archivable
 
 extension Cloud where A == Archive {    
-    public func secret() async -> Secret {
-        let secret = Secret
-            .new
-            .with(id: id)
-            .with(name: "Untitled")
+    public func secret() async -> Int {
+        let id = self.id
         arch
             .secrets
-            .append(secret)
+            .append(
+                .new
+                    .with(id: id)
+                    .with(name: "Untitled"))
         await stream()
-        return secret
+        return id
     }
     
     public func delete(id: Int) async {
