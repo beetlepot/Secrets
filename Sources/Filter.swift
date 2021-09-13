@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Filter {
+public struct Filter: Equatable {
     public var search = ""
     public var favourites = false
     public var tags = Set<Tag>()
