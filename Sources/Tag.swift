@@ -14,7 +14,7 @@ public enum Tag: UInt8, CaseIterable, Comparable {
     other,
     security,
     children,
-    pet,
+    pets,
     food,
     snacks,
     drinks,
@@ -28,7 +28,22 @@ public enum Tag: UInt8, CaseIterable, Comparable {
     numbers,
     keys,
     cook,
-    tools
+    tools,
+    biscuits,
+    hidden,
+    friends,
+    kids,
+    eco,
+    documents,
+    official,
+    credentials,
+    apps,
+    programs,
+    software,
+    computer,
+    mobile,
+    phone,
+    number
     
     public static func < (lhs: Self, rhs: Self) -> Bool {
         "\(lhs)".localizedCompare("\(rhs)") == .orderedAscending

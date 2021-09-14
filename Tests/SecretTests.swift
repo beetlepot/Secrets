@@ -24,7 +24,7 @@ final class SecretTests: XCTestCase {
         secret = secret.with(payload: "some payload")
         secret = secret.with(date: date)
         secret = secret.with(favourite: true)
-        secret = secret.with(tags: [.pet, .food, .books])
+        secret = secret.with(tags: [.pets, .food, .books])
         
         secret = secret.data.prototype()
         
@@ -32,7 +32,7 @@ final class SecretTests: XCTestCase {
         XCTAssertEqual("secret name", secret.name)
         XCTAssertEqual("some payload", secret.payload)
         XCTAssertTrue(secret.favourite)
-        XCTAssertTrue(secret.tags.contains(.pet))
+        XCTAssertTrue(secret.tags.contains(.pets))
         XCTAssertTrue(secret.tags.contains(.food))
         XCTAssertTrue(secret.tags.contains(.books))
     }
