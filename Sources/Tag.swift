@@ -52,7 +52,33 @@ public enum Tag: UInt8, CaseIterable, Comparable {
     verification,
     token
     
+    public var name: String {
+        "\(self)"
+    }
+    
+    public static func filtering(search: String) -> [Self] {
+        { components in
+            components.isEmpty
+            ? allCases
+            : allCases
+                .filter { tag in
+                    components
+                        .contains {
+                            tag
+                                .name
+                                .localizedCaseInsensitiveContains($0)
+                        }
+                }
+        } (search
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .components(separatedBy: " ")
+            .filter {
+                !$0.isEmpty
+            })
+            .sorted()
+    }
+    
     public static func < (lhs: Self, rhs: Self) -> Bool {
-        "\(lhs)".localizedCompare("\(rhs)") == .orderedAscending
+        lhs.name.localizedCompare(rhs.name) == .orderedAscending
     }
 }
