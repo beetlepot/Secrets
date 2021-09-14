@@ -50,7 +50,13 @@ public enum Tag: UInt8, CaseIterable, Comparable {
     card,
     date,
     verification,
-    token
+    token,
+    job,
+    human,
+    resources,
+    person,
+    people,
+    parents
     
     public var name: String {
         "\(self)"
