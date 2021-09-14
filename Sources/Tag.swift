@@ -43,7 +43,8 @@ public enum Tag: UInt8, CaseIterable, Comparable {
     computer,
     mobile,
     phone,
-    number
+    number,
+    contact
     
     public static func < (lhs: Self, rhs: Self) -> Bool {
         "\(lhs)".localizedCompare("\(rhs)") == .orderedAscending
