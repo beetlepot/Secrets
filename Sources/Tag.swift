@@ -44,7 +44,13 @@ public enum Tag: UInt8, CaseIterable, Comparable {
     mobile,
     phone,
     number,
-    contact
+    contact,
+    bank,
+    account,
+    card,
+    date,
+    verification,
+    token
     
     public static func < (lhs: Self, rhs: Self) -> Bool {
         "\(lhs)".localizedCompare("\(rhs)") == .orderedAscending
