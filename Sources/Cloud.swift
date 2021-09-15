@@ -1,7 +1,12 @@
 import Archivable
 
 extension Cloud where A == Archive {    
-    public func secret() async -> Int {
+    public func secret() async throws -> Int {
+        guard
+            _archive.available
+        else {
+            throw Failure.full
+        }
         let id = self.id
         _archive
             .secrets
@@ -106,10 +111,10 @@ extension Cloud where A == Archive {
             if !_archive
                 .secrets
                 .contains(where: { $0.id == index }) {
-                return index
-            }
+                    return index
+                }
         }
-        return Int(UInt16.max)
+        return .init(UInt16.max)
     }
     
     func index(id: Int) -> Int? {

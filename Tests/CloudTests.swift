@@ -7,18 +7,16 @@ final class CloudTests: XCTestCase {
     private var cloud: Cloud<Archive>!
     private var subs: Set<AnyCancellable>!
     
-    override func setUp() async throws {
+    override func setUp() {
         cloud = .emphemeral
         subs = []
-        _ = await cloud.secret()
-        _ = await cloud.secret()
-        _ = await cloud.secret()
-        await cloud.delete(id: 1)
     }
     
     func testNew() async {
         let expect = expectation(description: "")
         let date = Date()
+        
+        await stubs()
         
         cloud
             .archive
@@ -30,13 +28,12 @@ final class CloudTests: XCTestCase {
                 XCTAssertGreaterThanOrEqual($0.timestamp, date.timestamp)
                 XCTAssertGreaterThanOrEqual($0.secrets.first?.date.timestamp ?? 0, date.timestamp)
                 XCTAssertGreaterThanOrEqual($0.secrets.last?.date.timestamp ?? 0, date.timestamp)
-                XCTAssertFalse($0.available)
                 expect.fulfill()
             }
             .store(in: &subs)
         
-        let first = await cloud.secret()
-        let second = await cloud.secret()
+        let first = try! await cloud.secret()
+        let second = try! await cloud.secret()
         
         XCTAssertEqual(1, first)
         XCTAssertEqual(3, second)
@@ -44,20 +41,32 @@ final class CloudTests: XCTestCase {
         await waitForExpectations(timeout: 1)
     }
     
+    func testCreateFullThrows() async {
+        _ = try! await cloud.secret()
+        do {
+            _ = try await cloud.secret()
+        } catch {
+            return
+        }
+        XCTFail()
+    }
+    
     func testIds() async {
-        _ = await cloud.secret()
-        _ = await cloud.secret()
-        _ = await cloud.secret()
-        _ = await cloud.secret()
-        _ = await cloud.secret()
+        await stubs()
         
-        let beforeDelete1 = await cloud.secret()
+        _ = try! await cloud.secret()
+        _ = try! await cloud.secret()
+        _ = try! await cloud.secret()
+        _ = try! await cloud.secret()
+        _ = try! await cloud.secret()
+        
+        let beforeDelete1 = try! await cloud.secret()
         XCTAssertEqual(7, beforeDelete1)
         
         await cloud.delete(id: 2)
         
-        let afterDelete1 = await cloud.secret()
-        let afterDelete2 = await cloud.secret()
+        let afterDelete1 = try! await cloud.secret()
+        let afterDelete2 = try! await cloud.secret()
         XCTAssertEqual(2, afterDelete1)
         XCTAssertEqual(8, afterDelete2)
         
@@ -69,7 +78,10 @@ final class CloudTests: XCTestCase {
     
     func testDelete() async {
         let expect = expectation(description: "")
-        _ = await cloud.secret()
+        
+        await stubs()
+        
+        _ = try! await cloud.secret()
         await cloud.update(id: 2, name: "hello")
         let nameBefore = await cloud._archive.secrets[1].name
         XCTAssertEqual("hello", nameBefore)
@@ -93,7 +105,10 @@ final class CloudTests: XCTestCase {
     
     func testUpdateName() async {
         let expect = expectation(description: "")
-        _ = await cloud.secret()
+        
+        await stubs()
+        
+        _ = try! await cloud.secret()
         await cloud.update(id: 2, name: "hello world")
         
         cloud
@@ -111,7 +126,10 @@ final class CloudTests: XCTestCase {
     }
     
     func testUpdateNameSame() async {
-        _ = await cloud.secret()
+        _ = try! await cloud.secret()
+        
+        await stubs()
+        
         await cloud.update(id: 0, name: "hello world")
         
         cloud
@@ -127,7 +145,10 @@ final class CloudTests: XCTestCase {
     
     func testUpdatePayload() async {
         let expect = expectation(description: "")
-        _ = await cloud.secret()
+        
+        await stubs()
+        
+        _ = try! await cloud.secret()
         
         cloud
             .archive
@@ -144,7 +165,10 @@ final class CloudTests: XCTestCase {
     }
     
     func testUpdatePayloadSame() async {
-        _ = await cloud.secret()
+        _ = try! await cloud.secret()
+        
+        await stubs()
+        
         await cloud.update(id: 0, payload: "hello world")
         
         cloud
@@ -160,7 +184,10 @@ final class CloudTests: XCTestCase {
     
     func testUpdateFavourite() async {
         let expect = expectation(description: "")
-        _ = await cloud.secret()
+        
+        await stubs()
+        
+        _ = try! await cloud.secret()
         
         cloud
             .archive
@@ -177,7 +204,9 @@ final class CloudTests: XCTestCase {
     }
     
     func testUpdateFavouriteSame() async {
-        _ = await cloud.secret()
+        await stubs()
+        
+        _ = try! await cloud.secret()
         
         cloud
             .archive
@@ -192,7 +221,10 @@ final class CloudTests: XCTestCase {
     
     func testAddTag() async {
         let expect = expectation(description: "")
-        _ = await cloud.secret()
+        
+        await stubs()
+        
+        _ = try! await cloud.secret()
         
         cloud
             .archive
@@ -209,7 +241,10 @@ final class CloudTests: XCTestCase {
     }
     
     func testAddTagSame() async {
-        _ = await cloud.secret()
+        _ = try! await cloud.secret()
+        
+        await stubs()
+        
         await cloud.add(id: 0, tag: .important)
         
         cloud
@@ -225,7 +260,10 @@ final class CloudTests: XCTestCase {
     
     func testRemoveTag() async {
         let expect = expectation(description: "")
-        _ = await cloud.secret()
+        
+        await stubs()
+        
+        _ = try! await cloud.secret()
         
         cloud
             .archive
@@ -243,7 +281,9 @@ final class CloudTests: XCTestCase {
     }
     
     func testRemoveTagSameNot() async {
-        _ = await cloud.secret()
+        await stubs()
+        
+        _ = try! await cloud.secret()
         
         cloud
             .archive
@@ -304,5 +344,13 @@ final class CloudTests: XCTestCase {
         await cloud.remove(purchase: .ten)
         
         await waitForExpectations(timeout: 1)
+    }
+    
+    private func stubs() async {
+        await cloud.add(purchase: .ten)
+        _ = try! await cloud.secret()
+        _ = try! await cloud.secret()
+        _ = try! await cloud.secret()
+        await cloud.delete(id: 1)
     }
 }
