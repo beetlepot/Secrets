@@ -22,7 +22,7 @@ final class CloudTests: XCTestCase {
         
         cloud
             .archive
-            .dropFirst()
+            .dropFirst(2)
             .sink {
                 XCTAssertEqual(4, $0.secrets.count)
                 XCTAssertEqual("Untitled", $0.secrets.first?.name)
@@ -61,8 +61,8 @@ final class CloudTests: XCTestCase {
         XCTAssertEqual(2, afterDelete1)
         XCTAssertEqual(8, afterDelete2)
         
-        let id1 = await cloud.arch.secrets[cloud.arch.secrets.count - 2].id
-        let id2 = await cloud.arch.secrets[cloud.arch.secrets.count - 1].id
+        let id1 = await cloud._archive.secrets[cloud._archive.secrets.count - 2].id
+        let id2 = await cloud._archive.secrets[cloud._archive.secrets.count - 1].id
         XCTAssertEqual(2, id1)
         XCTAssertEqual(8, id2)
     }
@@ -71,11 +71,12 @@ final class CloudTests: XCTestCase {
         let expect = expectation(description: "")
         _ = await cloud.secret()
         await cloud.update(id: 2, name: "hello")
-        let nameBefore = await cloud.arch.secrets[1].name
+        let nameBefore = await cloud._archive.secrets[1].name
         XCTAssertEqual("hello", nameBefore)
         
         cloud
             .archive
+            .dropFirst()
             .sink {
                 XCTAssertEqual(2, $0.secrets.count)
                 expect.fulfill()
@@ -84,7 +85,7 @@ final class CloudTests: XCTestCase {
         
         await cloud.delete(id: 2)
         
-        let nameAfter = await cloud.arch.secrets[1].name
+        let nameAfter = await cloud._archive.secrets[1].name
         XCTAssertNotEqual("hello", nameAfter)
         
         await waitForExpectations(timeout: 1)
@@ -97,6 +98,7 @@ final class CloudTests: XCTestCase {
         
         cloud
             .archive
+            .dropFirst()
             .sink {
                 XCTAssertEqual("lorem ipsum", $0.secrets[1].name)
                 expect.fulfill()
@@ -114,6 +116,7 @@ final class CloudTests: XCTestCase {
         
         cloud
             .archive
+            .dropFirst()
             .sink { _ in
                 XCTFail()
             }
@@ -128,6 +131,7 @@ final class CloudTests: XCTestCase {
         
         cloud
             .archive
+            .dropFirst()
             .sink {
                 XCTAssertEqual("lorem ipsum", $0.secrets[1].payload)
                 expect.fulfill()
@@ -145,6 +149,7 @@ final class CloudTests: XCTestCase {
         
         cloud
             .archive
+            .dropFirst()
             .sink { _ in
                 XCTFail()
             }
@@ -159,6 +164,7 @@ final class CloudTests: XCTestCase {
         
         cloud
             .archive
+            .dropFirst()
             .sink {
                 XCTAssertTrue($0.secrets[1].favourite)
                 expect.fulfill()
@@ -175,6 +181,7 @@ final class CloudTests: XCTestCase {
         
         cloud
             .archive
+            .dropFirst()
             .sink { _ in
                 XCTFail()
             }
@@ -189,6 +196,7 @@ final class CloudTests: XCTestCase {
         
         cloud
             .archive
+            .dropFirst()
             .sink {
                 XCTAssertTrue($0.secrets[1].tags.contains(.books))
                 expect.fulfill()
@@ -206,6 +214,7 @@ final class CloudTests: XCTestCase {
         
         cloud
             .archive
+            .dropFirst()
             .sink { _ in
                 XCTFail()
             }
@@ -220,7 +229,7 @@ final class CloudTests: XCTestCase {
         
         cloud
             .archive
-            .dropFirst()
+            .dropFirst(2)
             .sink {
                 XCTAssertFalse($0.secrets[1].tags.contains(.books))
                 expect.fulfill()
@@ -238,6 +247,7 @@ final class CloudTests: XCTestCase {
         
         cloud
             .archive
+            .dropFirst()
             .sink { _ in
                 XCTFail()
             }
@@ -251,6 +261,7 @@ final class CloudTests: XCTestCase {
         
         cloud
             .archive
+            .dropFirst()
             .sink {
                 XCTAssertEqual(6, $0.capacity)
                 expect.fulfill()
@@ -266,7 +277,7 @@ final class CloudTests: XCTestCase {
         let expect = expectation(description: "")
         cloud
             .archive
-            .dropFirst()
+            .dropFirst(2)
             .sink {
                 XCTAssertEqual(10, $0.capacity)
                 expect.fulfill()
@@ -283,6 +294,7 @@ final class CloudTests: XCTestCase {
         let expect = expectation(description: "")
         cloud
             .archive
+            .dropFirst()
             .sink {
                 XCTAssertEqual(1, $0.capacity)
                 expect.fulfill()

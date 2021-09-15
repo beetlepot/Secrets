@@ -3,7 +3,7 @@ import Archivable
 extension Cloud where A == Archive {    
     public func secret() async -> Int {
         let id = self.id
-        arch
+        _archive
             .secrets
             .append(
                 .new
@@ -15,7 +15,7 @@ extension Cloud where A == Archive {
     
     public func delete(id: Int) async {
         guard let index = index(id: id) else { return }
-        arch
+        _archive
             .secrets
             .remove(at: index)
         await stream()
@@ -24,9 +24,9 @@ extension Cloud where A == Archive {
     public func update(id: Int, name: String) async {
         guard
             let index = index(id: id),
-            name != arch.secrets[index].name
+            name != _archive.secrets[index].name
         else { return }
-        arch
+        _archive
             .secrets
             .mutate(index: index) {
                 $0.with(name: name)
@@ -37,9 +37,9 @@ extension Cloud where A == Archive {
     public func update(id: Int, payload: String) async {
         guard
             let index = index(id: id),
-            payload != arch.secrets[index].payload
+            payload != _archive.secrets[index].payload
         else { return }
-        arch
+        _archive
             .secrets
             .mutate(index: index) {
                 $0.with(payload: payload)
@@ -50,9 +50,9 @@ extension Cloud where A == Archive {
     public func update(id: Int, favourite: Bool) async {
         guard
             let index = index(id: id),
-            favourite != arch.secrets[index].favourite
+            favourite != _archive.secrets[index].favourite
         else { return }
-        arch
+        _archive
             .secrets
             .mutate(index: index) {
                 $0.with(favourite: favourite)
@@ -63,9 +63,9 @@ extension Cloud where A == Archive {
     public func add(id: Int, tag: Tag) async {
         guard
             let index = index(id: id),
-            !arch.secrets[index].tags.contains(tag)
+            !_archive.secrets[index].tags.contains(tag)
         else { return }
-        arch
+        _archive
             .secrets
             .mutate(index: index) {
                 $0.with(tags: $0
@@ -78,9 +78,9 @@ extension Cloud where A == Archive {
     public func remove(id: Int, tag: Tag) async {
         guard
             let index = index(id: id),
-            arch.secrets[index].tags.contains(tag)
+            _archive.secrets[index].tags.contains(tag)
         else { return }
-        arch
+        _archive
             .secrets
             .mutate(index: index) {
                 $0.with(tags: $0
@@ -91,19 +91,19 @@ extension Cloud where A == Archive {
     }
     
     public func add(purchase: Purchase) async {
-        arch.capacity += purchase.value
+        _archive.capacity += purchase.value
         await stream()
     }
     
     public func remove(purchase: Purchase) async {
-        arch.capacity -= purchase.value
-        arch.capacity = max(arch.capacity, 1)
+        _archive.capacity -= purchase.value
+        _archive.capacity = max(_archive.capacity, 1)
         await stream()
     }
     
     private var id: Int {
         for index in (0 ..< 1_000) {
-            if !arch
+            if !_archive
                 .secrets
                 .contains(where: { $0.id == index }) {
                 return index
@@ -113,7 +113,7 @@ extension Cloud where A == Archive {
     }
     
     func index(id: Int) -> Int? {
-        arch
+        _archive
             .secrets
             .firstIndex {
                 $0.id == id
