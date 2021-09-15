@@ -1,7 +1,7 @@
 import Foundation
 
 extension Array where Element == Secret {
-    func filtering(with: Filter) -> [Int] {
+    func filtering(with: Filter) -> Self {
         filter {
             with.favourites
             ? $0.favourite
@@ -26,6 +26,5 @@ extension Array where Element == Secret {
                 !$0.isEmpty
             })
         }
-        .map(\.id)
     }
 }
