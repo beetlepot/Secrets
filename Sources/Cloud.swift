@@ -3,12 +3,12 @@ import Archivable
 extension Cloud where A == Archive {    
     public func secret() async throws -> Int {
         guard
-            _archive.available
+            model.available
         else {
             throw Failure.full
         }
         let id = self.id
-        _archive
+        model
             .secrets
             .append(
                 .new
@@ -20,7 +20,7 @@ extension Cloud where A == Archive {
     
     public func delete(id: Int) async {
         guard let index = index(id: id) else { return }
-        _archive
+        model
             .secrets
             .remove(at: index)
         await stream()
@@ -29,9 +29,9 @@ extension Cloud where A == Archive {
     public func update(id: Int, name: String) async {
         guard
             let index = index(id: id),
-            name != _archive.secrets[index].name
+            name != model.secrets[index].name
         else { return }
-        _archive
+        model
             .secrets
             .mutate(index: index) {
                 $0.with(name: name)
@@ -42,9 +42,9 @@ extension Cloud where A == Archive {
     public func update(id: Int, payload: String) async {
         guard
             let index = index(id: id),
-            payload != _archive.secrets[index].payload
+            payload != model.secrets[index].payload
         else { return }
-        _archive
+        model
             .secrets
             .mutate(index: index) {
                 $0.with(payload: payload)
@@ -55,9 +55,9 @@ extension Cloud where A == Archive {
     public func update(id: Int, favourite: Bool) async {
         guard
             let index = index(id: id),
-            favourite != _archive.secrets[index].favourite
+            favourite != model.secrets[index].favourite
         else { return }
-        _archive
+        model
             .secrets
             .mutate(index: index) {
                 $0.with(favourite: favourite)
@@ -68,9 +68,9 @@ extension Cloud where A == Archive {
     public func add(id: Int, tag: Tag) async {
         guard
             let index = index(id: id),
-            !_archive.secrets[index].tags.contains(tag)
+            !model.secrets[index].tags.contains(tag)
         else { return }
-        _archive
+        model
             .secrets
             .mutate(index: index) {
                 $0.with(tags: $0
@@ -83,9 +83,9 @@ extension Cloud where A == Archive {
     public func remove(id: Int, tag: Tag) async {
         guard
             let index = index(id: id),
-            _archive.secrets[index].tags.contains(tag)
+            model.secrets[index].tags.contains(tag)
         else { return }
-        _archive
+        model
             .secrets
             .mutate(index: index) {
                 $0.with(tags: $0
@@ -96,19 +96,19 @@ extension Cloud where A == Archive {
     }
     
     public func add(purchase: Purchase) async {
-        _archive.capacity += purchase.value
+        model.capacity += purchase.value
         await stream()
     }
     
     public func remove(purchase: Purchase) async {
-        _archive.capacity -= purchase.value
-        _archive.capacity = max(_archive.capacity, 1)
+        model.capacity -= purchase.value
+        model.capacity = max(model.capacity, 1)
         await stream()
     }
     
     private var id: Int {
         for index in (0 ..< 1_000) {
-            if !_archive
+            if !model
                 .secrets
                 .contains(where: { $0.id == index }) {
                     return index
@@ -118,7 +118,7 @@ extension Cloud where A == Archive {
     }
     
     func index(id: Int) -> Int? {
-        _archive
+        model
             .secrets
             .firstIndex {
                 $0.id == id

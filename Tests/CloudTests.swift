@@ -8,7 +8,7 @@ final class CloudTests: XCTestCase {
     private var subs: Set<AnyCancellable>!
     
     override func setUp() {
-        cloud = .emphemeral
+        cloud = .ephemeral
         subs = []
     }
     
@@ -20,7 +20,7 @@ final class CloudTests: XCTestCase {
         
         cloud
             .archive
-            .dropFirst(2)
+            .dropFirst()
             .sink {
                 XCTAssertEqual(4, $0.secrets.count)
                 XCTAssertEqual("Untitled", $0.secrets.first?.name)
@@ -28,7 +28,9 @@ final class CloudTests: XCTestCase {
                 XCTAssertGreaterThanOrEqual($0.timestamp, date.timestamp)
                 XCTAssertGreaterThanOrEqual($0.secrets.first?.date.timestamp ?? 0, date.timestamp)
                 XCTAssertGreaterThanOrEqual($0.secrets.last?.date.timestamp ?? 0, date.timestamp)
+                print("fik")
                 expect.fulfill()
+                
             }
             .store(in: &subs)
         
@@ -70,8 +72,8 @@ final class CloudTests: XCTestCase {
         XCTAssertEqual(2, afterDelete1)
         XCTAssertEqual(8, afterDelete2)
         
-        let id1 = await cloud._archive.secrets[cloud._archive.secrets.count - 2].id
-        let id2 = await cloud._archive.secrets[cloud._archive.secrets.count - 1].id
+        let id1 = await cloud.model.secrets[cloud.model.secrets.count - 2].id
+        let id2 = await cloud.model.secrets[cloud.model.secrets.count - 1].id
         XCTAssertEqual(2, id1)
         XCTAssertEqual(8, id2)
     }
@@ -83,7 +85,7 @@ final class CloudTests: XCTestCase {
         
         _ = try! await cloud.secret()
         await cloud.update(id: 2, name: "hello")
-        let nameBefore = await cloud._archive.secrets[1].name
+        let nameBefore = await cloud.model.secrets[1].name
         XCTAssertEqual("hello", nameBefore)
         
         cloud
@@ -97,7 +99,7 @@ final class CloudTests: XCTestCase {
         
         await cloud.delete(id: 2)
         
-        let nameAfter = await cloud._archive.secrets[1].name
+        let nameAfter = await cloud.model.secrets[1].name
         XCTAssertNotEqual("hello", nameAfter)
         
         await waitForExpectations(timeout: 1)
