@@ -36,16 +36,16 @@ final class CloudTests: XCTestCase {
         let expect = expectation(description: "")
         
         cloud
-            .archive
             .dropFirst()
             .sink { _ in
                 expect.fulfill()
             }
             .store(in: &subs)
         
-        Task {
-            try! await cloud.secret()
-        }
+        Task
+            .detached {
+                try! await self.cloud.secret()
+            }
         
         waitForExpectations(timeout: 1)
     }
@@ -104,17 +104,17 @@ final class CloudTests: XCTestCase {
         let expect = expectation(description: "")
 
         cloud
-            .archive
             .dropFirst(2)
             .sink { _ in
                 expect.fulfill()
             }
             .store(in: &subs)
         
-        Task {
-            _ = try! await cloud.secret()
-            await cloud.delete(id: 0)
-        }
+        Task
+            .detached {
+                _ = try! await self.cloud.secret()
+                await self.cloud.delete(id: 0)
+            }
         
         waitForExpectations(timeout: 1)
     }
@@ -135,17 +135,17 @@ final class CloudTests: XCTestCase {
         let expect = expectation(description: "")
         
         cloud
-            .archive
             .dropFirst(2)
             .sink { _ in
                 expect.fulfill()
             }
             .store(in: &subs)
         
-        Task {
-            _ = try! await cloud.secret()
-            await cloud.update(id: 0, name: "lorem ipsum")
-        }
+        Task
+            .detached {
+                _ = try! await self.cloud.secret()
+                await self.cloud.update(id: 0, name: "lorem ipsum")
+            }
         
         waitForExpectations(timeout: 1)
     }
@@ -154,18 +154,18 @@ final class CloudTests: XCTestCase {
         let expect = expectation(description: "")
         
         cloud
-            .archive
             .dropFirst(2)
             .sink { _ in
                 expect.fulfill()
             }
             .store(in: &subs)
         
-        Task {
-            _ = try! await cloud.secret()
-            await cloud.update(id: 0, name: "hello world")
-            await cloud.update(id: 0, name: "hello world")
-        }
+        Task
+            .detached {
+                _ = try! await self.cloud.secret()
+                await self.cloud.update(id: 0, name: "hello world")
+                await self.cloud.update(id: 0, name: "hello world")
+            }
         
         waitForExpectations(timeout: 1)
     }
@@ -184,17 +184,17 @@ final class CloudTests: XCTestCase {
         let expect = expectation(description: "")
         
         cloud
-            .archive
             .dropFirst(2)
             .sink { _ in
                 expect.fulfill()
             }
             .store(in: &subs)
         
-        Task {
-            _ = try! await cloud.secret()
-            await cloud.update(id: 0, payload: "lorem ipsum")
-        }
+        Task
+            .detached {
+                _ = try! await self.cloud.secret()
+                await self.cloud.update(id: 0, payload: "lorem ipsum")
+            }
         
         waitForExpectations(timeout: 1)
     }
@@ -203,18 +203,18 @@ final class CloudTests: XCTestCase {
         let expect = expectation(description: "")
         
         cloud
-            .archive
             .dropFirst(2)
             .sink { _ in
                 expect.fulfill()
             }
             .store(in: &subs)
         
-        Task {
-            _ = try! await cloud.secret()
-            await cloud.update(id: 0, payload: "hello world")
-            await cloud.update(id: 0, payload: "hello world")
-        }
+        Task
+            .detached {
+                _ = try! await self.cloud.secret()
+                await self.cloud.update(id: 0, payload: "hello world")
+                await self.cloud.update(id: 0, payload: "hello world")
+            }
         
         waitForExpectations(timeout: 1)
     }
@@ -233,17 +233,17 @@ final class CloudTests: XCTestCase {
         let expect = expectation(description: "")
         
         cloud
-            .archive
             .dropFirst(2)
             .sink { _ in
                 expect.fulfill()
             }
             .store(in: &subs)
         
-        Task {
-            _ = try! await cloud.secret()
-            await cloud.update(id: 0, favourite: true)
-        }
+        Task
+            .detached {
+                _ = try! await self.cloud.secret()
+                await self.cloud.update(id: 0, favourite: true)
+            }
         
         waitForExpectations(timeout: 1)
     }
@@ -252,17 +252,17 @@ final class CloudTests: XCTestCase {
         let expect = expectation(description: "")
         
         cloud
-            .archive
             .dropFirst()
             .sink { _ in
                 expect.fulfill()
             }
             .store(in: &subs)
         
-        Task {
-            _ = try! await cloud.secret()
-            await cloud.update(id: 0, favourite: false)
-        }
+        Task
+            .detached {
+                _ = try! await self.cloud.secret()
+                await self.cloud.update(id: 0, favourite: false)
+            }
         
         waitForExpectations(timeout: 1)
     }
@@ -281,17 +281,17 @@ final class CloudTests: XCTestCase {
         let expect = expectation(description: "")
         
         cloud
-            .archive
             .dropFirst(2)
             .sink { _ in
                 expect.fulfill()
             }
             .store(in: &subs)
         
-        Task {
-            _ = try! await cloud.secret()
-            await cloud.add(id: 0, tag: .books)
-        }
+        Task
+            .detached {
+                _ = try! await self.cloud.secret()
+                await self.cloud.add(id: 0, tag: .books)
+            }
         
         waitForExpectations(timeout: 1)
     }
@@ -300,18 +300,18 @@ final class CloudTests: XCTestCase {
         let expect = expectation(description: "")
         
         cloud
-            .archive
             .dropFirst(2)
             .sink { _ in
                 expect.fulfill()
             }
             .store(in: &subs)
         
-        Task {
-            _ = try! await cloud.secret()
-            await cloud.add(id: 0, tag: .important)
-            await cloud.add(id: 0, tag: .important)
-        }
+        Task
+            .detached {
+                _ = try! await self.cloud.secret()
+                await self.cloud.add(id: 0, tag: .important)
+                await self.cloud.add(id: 0, tag: .important)
+            }
         
         waitForExpectations(timeout: 1)
     }
@@ -331,18 +331,18 @@ final class CloudTests: XCTestCase {
         let expect = expectation(description: "")
         
         cloud
-            .archive
             .dropFirst(3)
             .sink { _ in
                 expect.fulfill()
             }
             .store(in: &subs)
         
-        Task {
-            _ = try! await cloud.secret()
-            await cloud.add(id: 0, tag: .books)
-            await cloud.remove(id: 0, tag: .books)
-        }
+        Task
+            .detached {
+                _ = try! await self.cloud.secret()
+                await self.cloud.add(id: 0, tag: .books)
+                await self.cloud.remove(id: 0, tag: .books)
+            }
         
         waitForExpectations(timeout: 1)
     }
@@ -351,17 +351,17 @@ final class CloudTests: XCTestCase {
         let expect = expectation(description: "")
     
         cloud
-            .archive
             .dropFirst()
             .sink { _ in
                 expect.fulfill()
             }
             .store(in: &subs)
         
-        Task {
-            _ = try! await cloud.secret()
-            await cloud.remove(id: 0, tag: .important)
-        }
+        Task
+            .detached {
+                _ = try! await self.cloud.secret()
+                await self.cloud.remove(id: 0, tag: .important)
+            }
         
         waitForExpectations(timeout: 1)
     }
@@ -377,7 +377,6 @@ final class CloudTests: XCTestCase {
         let expect = expectation(description: "")
         
         cloud
-            .archive
             .dropFirst()
             .sink {
                 XCTAssertEqual(6, $0.capacity)
@@ -385,9 +384,10 @@ final class CloudTests: XCTestCase {
             }
             .store(in: &subs)
         
-        Task {
-            await cloud.add(purchase: .five)
-        }
+        Task
+            .detached {
+                    await self.cloud.add(purchase: .five)
+            }
         
         waitForExpectations(timeout: 1)
     }
@@ -404,17 +404,17 @@ final class CloudTests: XCTestCase {
         let expect = expectation(description: "")
         
         cloud
-            .archive
             .dropFirst(2)
             .sink { _ in
                 expect.fulfill()
             }
             .store(in: &subs)
         
-        Task {
-            await cloud.add(purchase: .ten)
-            await cloud.remove(purchase: .one)
-        }
+        Task
+            .detached {
+                await self.cloud.add(purchase: .ten)
+                await self.cloud.remove(purchase: .one)
+            }
         
         waitForExpectations(timeout: 1)
     }

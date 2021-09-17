@@ -5,7 +5,7 @@ extension Cloud where A == Archive {
         guard
             model.available
         else {
-            throw Failure.full
+            throw SecretsError.full
         }
         let id = self.id
         model
@@ -102,7 +102,7 @@ extension Cloud where A == Archive {
     
     public func remove(purchase: Purchase) async {
         model.capacity -= purchase.value
-        model.capacity = max(model.capacity, 1)
+        model.capacity = Swift.max(model.capacity, 1)
         await stream()
     }
     

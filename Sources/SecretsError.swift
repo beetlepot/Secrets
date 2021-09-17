@@ -1,6 +1,6 @@
 import Foundation
 
-public enum Failure: Error {
+public enum SecretsError: Error {
     case
     full
 }
