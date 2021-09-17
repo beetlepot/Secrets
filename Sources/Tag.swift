@@ -1,4 +1,8 @@
-public enum Tag: UInt8, CaseIterable, Comparable {
+public enum Tag: UInt8, CaseIterable, Comparable, Identifiable {
+    public var id: UInt8 {
+        rawValue
+    }
+    
     case
     home,
     office,
