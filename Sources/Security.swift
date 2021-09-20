@@ -2,7 +2,8 @@ import Foundation
 import CryptoKit
 
 private let account = "Secrets"
-private let service = "Protection"
+private let service = "Security"
+private let group = "beet"
 
 enum Security {
     static var key: SymmetricKey?
@@ -17,7 +18,8 @@ enum Security {
                 kSecAttrAccount: account,
                 kSecAttrService: service,
                 kSecUseDataProtectionKeychain: true,
-                kSecAttrSynchronizable: kSecAttrSynchronizableAny,
+                kSecAttrSynchronizable: true,
+                kSecAttrAccessGroup: group,
                 kSecReturnData: true] as [String: Any]) as CFDictionary, &item) == errSecSuccess,
             
             let data = item as? Data
@@ -38,6 +40,7 @@ enum Security {
                 kSecAttrService: service,
                 kSecUseDataProtectionKeychain: true,
                 kSecAttrSynchronizable: true,
+                kSecAttrAccessGroup: group,
                 kSecValueData: key!
                     .withUnsafeBytes {
                         Data($0)
