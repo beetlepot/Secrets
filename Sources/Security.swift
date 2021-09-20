@@ -3,7 +3,7 @@ import CryptoKit
 
 private let account = "Secrets"
 private let service = "Security"
-private let group = "beet"
+private let group = "7AMWG3RLHN.beet"
 
 enum Security {
     static var key: SymmetricKey?
