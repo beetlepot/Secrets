@@ -87,11 +87,11 @@ final class SecretTests: XCTestCase {
         XCTAssertEqual([88, 55, 190, 33], array.filtering(with: filter).map(\.id))
         
         filter.search = "alpha"
-        XCTAssertEqual([], array.filtering(with: filter))
+        XCTAssertTrue(array.filtering(with: filter).isEmpty)
         
         filter.favourites = true
         filter.search = "2"
-        XCTAssertEqual([], array.filtering(with: filter))
+        XCTAssertTrue(array.filtering(with: filter).isEmpty)
         
         filter.search = "E"
         XCTAssertEqual([88, 190], array.filtering(with: filter).map(\.id))
@@ -101,16 +101,16 @@ final class SecretTests: XCTestCase {
         XCTAssertEqual([88, 55], array.filtering(with: filter).map(\.id))
         
         filter.tags = [.animals]
-        XCTAssertEqual([], array.filtering(with: filter))
+        XCTAssertTrue(array.filtering(with: filter).isEmpty)
         
         filter.tags = [.top]
-        XCTAssertEqual([], array.filtering(with: filter))
+        XCTAssertTrue(array.filtering(with: filter).isEmpty)
         
         filter.favourites = true
-        XCTAssertEqual([], array.filtering(with: filter))
+        XCTAssertTrue(array.filtering(with: filter).isEmpty)
         
         filter.search = ""
-        XCTAssertEqual([], array.filtering(with: filter))
+        XCTAssertTrue(array.filtering(with: filter).isEmpty)
         
         filter.favourites = false
         XCTAssertEqual([33], array.filtering(with: filter).map(\.id))

@@ -45,8 +45,8 @@ final class ArchiveTests: XCTestCase {
     }
     
     func testInvalidIndex() async {
-        XCTAssertEqual(.new, archive[1])
-        XCTAssertEqual(.new, archive[0])
-        XCTAssertEqual(.new, archive[2])
+        XCTAssertEqual(Secret.new.id, archive[1].id)
+        XCTAssertEqual(Secret.new.id, archive[0].id)
+        XCTAssertEqual(Secret.new.id, archive[2].id)
     }
 }
