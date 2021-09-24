@@ -1,7 +1,7 @@
 import Foundation
 import Archivable
 
-public struct Secret: Storable, Identifiable {
+public struct Secret: Storable, Identifiable, Equatable {
     public static let new = Secret(id: .init(UInt16.max), name: "", payload: "", date: .now, favourite: false, tags: [])
     
     public let id: Int
