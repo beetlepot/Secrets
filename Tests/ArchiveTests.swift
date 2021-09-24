@@ -7,7 +7,7 @@ final class ArchiveTests: XCTestCase {
     
     override func setUp() {
         Security.key = .init(size: .bits256)
-        archive = .new
+        archive = .init()
     }
     
     func testCapacity() async {

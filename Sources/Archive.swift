@@ -2,8 +2,6 @@ import Foundation
 import Archivable
 
 public struct Archive: Arch {
-    public static let new = Self()
-    
     public var timestamp: UInt32
     public internal(set) var capacity: Int
     var secrets: [Secret]
@@ -26,7 +24,7 @@ public struct Archive: Arch {
         }
     }
     
-    private init() {
+    public init() {
         timestamp = 0
         secrets = []
         capacity = 1
