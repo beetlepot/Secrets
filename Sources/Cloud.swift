@@ -1,6 +1,6 @@
 import Archivable
 
-extension Cloud where A == Archive {    
+extension Cloud where Output == Archive {    
     public func secret() async throws -> Int {
         guard
             model.available

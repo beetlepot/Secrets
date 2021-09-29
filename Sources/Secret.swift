@@ -14,8 +14,8 @@ public struct Secret: Storable, Identifiable, Equatable {
     public var data: Data {
         .init()
         .adding(UInt16(id))
-        .adding(name)
-        .adding(payload)
+        .adding(UInt16.self, string: name)
+        .adding(UInt16.self, string: payload)
         .adding(date)
         .adding(favourite)
         .adding(UInt8(tags.count))
@@ -23,9 +23,9 @@ public struct Secret: Storable, Identifiable, Equatable {
     }
     
     public init(data: inout Data) {
-        id = .init(data.uInt16())
-        name = data.string()
-        payload = data.string()
+        id = .init(data.number() as UInt16)
+        name = data.string(UInt16.self)
+        payload = data.string(UInt16.self)
         date = data.date()
         favourite = data.bool()
         tags = .init((0 ..< .init(data.removeFirst()))
