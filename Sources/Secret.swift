@@ -18,8 +18,7 @@ public struct Secret: Storable, Identifiable, Equatable {
         .adding(UInt16.self, string: payload)
         .adding(date)
         .adding(favourite)
-        .adding(UInt8(tags.count))
-        .adding(tags.map(\.rawValue))
+        .wrapping(UInt8.self, data: .init(tags.map(\.rawValue)))
     }
     
     public init(data: inout Data) {
@@ -28,9 +27,10 @@ public struct Secret: Storable, Identifiable, Equatable {
         payload = data.string(UInt16.self)
         date = data.date()
         favourite = data.bool()
-        tags = .init((0 ..< .init(data.removeFirst()))
-                        .map { _ in
-                            .init(rawValue: data.removeFirst())!
+        tags = .init(data
+            .unwrap(UInt8.self)
+                        .map {
+                            .init(rawValue: $0)!
                         })
     }
     
