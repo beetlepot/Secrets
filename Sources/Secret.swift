@@ -14,21 +14,21 @@ public struct Secret: Storable, Identifiable, Equatable {
     public var data: Data {
         .init()
         .adding(UInt16(id))
-        .adding(UInt16.self, string: name)
-        .adding(UInt16.self, string: payload)
+        .adding(size: UInt16.self, string: name)
+        .adding(size: UInt16.self, string: payload)
         .adding(date)
         .adding(favourite)
-        .wrapping(UInt8.self, data: .init(tags.map(\.rawValue)))
+        .wrapping(size: UInt8.self, data: .init(tags.map(\.rawValue)))
     }
     
     public init(data: inout Data) {
         id = .init(data.number() as UInt16)
-        name = data.string(UInt16.self)
-        payload = data.string(UInt16.self)
+        name = data.string(size: UInt16.self)
+        payload = data.string(size: UInt16.self)
         date = data.date()
         favourite = data.bool()
         tags = .init(data
-            .unwrap(UInt8.self)
+                        .unwrap(size: UInt8.self)
                         .map {
                             .init(rawValue: $0)!
                         })

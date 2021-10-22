@@ -18,7 +18,7 @@ public struct Archive: Arch {
         get async {
             await .init()
                 .adding(UInt16(capacity))
-                .adding(UInt16.self, collection: secrets)
+                .adding(size: UInt16.self, collection: secrets)
                 .encrypted
         }
     }
@@ -49,7 +49,7 @@ public struct Archive: Arch {
         
         self.timestamp = timestamp
         capacity = .init(data.number() as UInt16)
-        secrets = data.collection(UInt16.self)
+        secrets = data.collection(size: UInt16.self)
     }
     
     public func filtering(with: Filter) -> [Secret] {
