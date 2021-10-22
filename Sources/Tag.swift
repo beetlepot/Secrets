@@ -47,7 +47,7 @@ public enum Tag: UInt8, CaseIterable, Comparable, Identifiable {
     computer,
     mobile,
     phone,
-    number,
+    keycode,
     contact,
     bank,
     account,
@@ -60,7 +60,12 @@ public enum Tag: UInt8, CaseIterable, Comparable, Identifiable {
     resources,
     person,
     people,
-    parents
+    parents,
+    address,
+    referral,
+    website,
+    delivery,
+    services
     
     public var name: String {
         "\(self)"
