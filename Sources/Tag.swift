@@ -65,7 +65,15 @@ public enum Tag: UInt8, CaseIterable, Comparable, Identifiable {
     referral,
     website,
     delivery,
-    services
+    services,
+    feminism,
+    lgbt,
+    vegetarian,
+    vegan,
+    iphone,
+    ipad,
+    watch,
+    mac
     
     public var name: String {
         "\(self)"
