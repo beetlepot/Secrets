@@ -7,7 +7,8 @@ public enum Defaults: String {
     _authenticate,
     _tools,
     _spell,
-    _correction
+    _correction,
+    _sidebar
     
     public static var action: Action {
         if let created = wasCreated {
@@ -45,6 +46,11 @@ public enum Defaults: String {
     public static var correction: Bool {
         get { self[._correction] as? Bool ?? false }
         set { self[._correction] = newValue }
+    }
+    
+    public static var sidebar: Bool {
+        get { self[._sidebar] as? Bool ?? false }
+        set { self[._sidebar] = newValue }
     }
     
     static var wasCreated: Date? {
