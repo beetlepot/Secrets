@@ -199,6 +199,36 @@ final class CloudTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
     
+    func testUpdateNamePayload() async {
+        await stubs()
+        
+        _ = try! await cloud.secret()
+        await cloud.update(id: 2, name: "lorem ipsum", payload: "asd")
+        
+        let archive = await cloud.model
+        XCTAssertEqual("lorem ipsum", archive.secrets[1].name)
+        XCTAssertEqual("asd", archive.secrets[1].payload)
+    }
+    
+    func testUpdateNamePayloadSaves() {
+        let expect = expectation(description: "")
+        
+        cloud
+            .dropFirst(2)
+            .sink { _ in
+                expect.fulfill()
+            }
+            .store(in: &subs)
+        
+        Task
+            .detached {
+                _ = try! await self.cloud.secret()
+                await self.cloud.update(id: 0, name: "lorem ipsum", payload: "asd")
+            }
+        
+        waitForExpectations(timeout: 1)
+    }
+    
     func testUpdatePayloadSameNotSaving() {
         let expect = expectation(description: "")
         

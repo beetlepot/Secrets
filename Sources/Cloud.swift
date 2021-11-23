@@ -52,6 +52,21 @@ extension Cloud where Output == Archive {
         await stream()
     }
     
+    public func update(id: Int, name: String, payload: String) async {
+        guard
+            let index = index(id: id),
+            name != model.secrets[index].name || payload != model.secrets[index].payload
+        else { return }
+        model
+            .secrets
+            .mutate(index: index) {
+                $0
+                    .with(name: name)
+                    .with(payload: payload)
+            }
+        await stream()
+    }
+    
     public func update(id: Int, favourite: Bool) async {
         guard
             let index = index(id: id),
