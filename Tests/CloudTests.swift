@@ -1,14 +1,14 @@
 import XCTest
 import Combine
-import Archivable
+@testable import Archivable
 @testable import Secrets
 
 final class CloudTests: XCTestCase {
-    private var cloud: Cloud<Archive>!
+    private var cloud: Cloud<Archive, MockContainer>!
     private var subs: Set<AnyCancellable>!
     
     override func setUp() {
-        cloud = .ephemeral
+        cloud = .init()
         subs = []
     }
     
