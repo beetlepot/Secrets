@@ -1,16 +1,14 @@
 {
-  "object": {
-    "pins": [
-      {
-        "package": "Archivable",
-        "repositoryURL": "https://github.com/archivable/package.git",
-        "state": {
-          "branch": "main",
-          "revision": "0436ca1f8067276eac71cd1f6b9ed00312a6395f",
-          "version": null
-        }
+  "pins" : [
+    {
+      "identity" : "package",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/archivable/package.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "2872c6e5c68656d6fbeaaea4fdb65d78be1f8ac7"
       }
-    ]
-  },
-  "version": 1
+    }
+  ],
+  "version" : 2
 }

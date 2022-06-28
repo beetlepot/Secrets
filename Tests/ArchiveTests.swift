@@ -13,7 +13,7 @@ final class ArchiveTests: XCTestCase {
     func testCapacity() async {
         XCTAssertEqual(1, archive.capacity)
         archive.capacity = 100
-        archive = await Archive.prototype(data: archive.compressed)
+        archive = await Archive(version: Archive.version, timestamp: archive.timestamp, data: archive.data)
         XCTAssertEqual(100, archive.capacity)
     }
     
@@ -27,7 +27,7 @@ final class ArchiveTests: XCTestCase {
         XCTAssertTrue(archive.secrets.isEmpty)
         archive.secrets.append(.new
                                 .with(payload: "hello"))
-        archive = await Archive.prototype(data: archive.compressed)
+        archive = await Archive(version: Archive.version, timestamp: archive.timestamp, data: archive.data)
         XCTAssertEqual(1, archive.secrets.count)
         XCTAssertEqual("hello", archive.secrets.first?.payload)
     }
@@ -36,10 +36,10 @@ final class ArchiveTests: XCTestCase {
         archive.capacity = 10
         archive.secrets.append(.new
                                 .with(payload: "hello"))
-        let compressed = await archive.compressed
+        let compressed = await archive.data
         Security.key = .init(size: .bits256)
         
-        archive = await Archive.prototype(data: compressed)
+        archive = await Archive(version: Archive.version, timestamp: archive.timestamp, data: compressed)
         XCTAssertTrue(archive.secrets.isEmpty)
         XCTAssertEqual(1, archive.capacity)
     }
