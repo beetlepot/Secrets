@@ -69,7 +69,7 @@ enum Security {
                     .GCM
                     .SealedBox(combined: data))
                     .flatMap {
-                        try? AES
+                        try! AES
                             .GCM
                             .open($0, using: key)
                     }
