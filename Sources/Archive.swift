@@ -23,6 +23,16 @@ public struct Archive: Arch {
         }
     }
     
+    var id: Int {
+        for index in (0 ..< 1_000) {
+            if !secrets
+                .contains(where: { $0.id == index }) {
+                return index
+            }
+        }
+        return .init(UInt16.max)
+    }
+    
     public init() {
         timestamp = 0
         secrets = []
@@ -54,5 +64,12 @@ public struct Archive: Arch {
     
     public func filtering(with: Filter) -> [Secret] {
         secrets.filtering(with: with)
+    }
+    
+    func index(id: Int) -> Int? {
+        secrets
+            .firstIndex {
+                $0.id == id
+            }
     }
 }
